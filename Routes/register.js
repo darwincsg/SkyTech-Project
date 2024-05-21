@@ -19,9 +19,9 @@ router.post("/",function(req, res){
 
     const nUser ={ username, password, fristname, lastname, email, avatar } = req.body;
 
-    const token = jwt.sign({username: username}, password, {expiresIn:'1h'});
+    const token = jwt.sign({username: username}, password, {expiresIn:'7d'});
 
-    const newUser = new User({username, password,fristname, lastname, email, avatar,token});
+    const newUser = new User({username, password,fristname, lastname, email, avatar});
 
     res.cookie('token', token, { httpOnly: true })
 

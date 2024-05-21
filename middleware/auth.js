@@ -3,8 +3,6 @@ const jwt = require('jsonwebtoken');
 // Middleware para verificar el token JWT en la cookie
 function verificarToken(req, res, next) {
     // Obtener el token JWT de la cookie
-
-    console.log(req.cookies);
     const token = req.cookies.token;
     // Verificar si el token está presente
     if (!token) {
@@ -13,7 +11,7 @@ function verificarToken(req, res, next) {
 
     try {
         // Verificar el token JWT con la clave secreta
-        const decoded = jwt.verify(token,'bb');
+        const decoded = jwt.verify(token,'admin');
 
         // Guardar el usuario decodificado en el objeto de solicitud para su uso posterior
         req.usuario = decoded;

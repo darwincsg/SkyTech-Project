@@ -1,0 +1,29 @@
+html,body{
+    height: 100%;
+    background-color: #f5f5f5;
+}
+
+.mynav{
+    color: #fff;
+}
+.mynav li a{
+    color: #fff;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+    padding: 8px 5px;
+}
+
+.mynav li a.active{
+    background-color: #051747;
+}
+
+.mynav li a:hover{
+    background-color: #051747;
+}
+
+.mynav li a i{
+    width: 25px;
+    text-align: center;
+}
