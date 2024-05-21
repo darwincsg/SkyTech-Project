@@ -20,8 +20,6 @@ app.use(express.static( path.join(__dirname + "/Views/")));
 
 //app.use(express.static( path.join(__dirname + "/Views/scripts")));
 
-app.use(express.static( path.join(__dirname + "/public/")));
-
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
