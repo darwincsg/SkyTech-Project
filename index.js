@@ -1,44 +1,42 @@
-const express = require("express");                  //Initializing express
+require('dotenv').config();
+const express = require("express");
 const app = express();
-
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
-const expressLayouts = require('express-ejs-layouts');
-
-//const { MongoClient } = require('mongodb'); //Initializing mongoose
-const bodyParser = require("body-parser");            //Initializing body-parser
+const bodyParser = require("body-parser");
+const path = require('path');
 
 app.set("view engine", "ejs");
-app.set("views", __dirname + "/Views");
-
-var path = require('path');
-
+app.set("views", path.join(__dirname, "Views"));
 
 app.use(cookieParser());
-
-app.use(express.static( path.join(__dirname + "/Views/")));
-
-//app.use(express.static( path.join(__dirname + "/Views/scripts")));
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const router = require("./Routes/index.js");
 const register = require("./Routes/register.js");
-const dashboard = require("./Routes/dash.js")
+const dashboard = require("./Routes/dash.js");
+const parts = require("./Routes/parts.js");
+const assemblies = require("./Routes/assemblies.js");
+const statistics = require("./Routes/statistics.js");
+const assemble = require("./Routes/assemble.js");
+const test = require("./Routes/test.js"); // Keep the test route
 
 app.use("/", router);
-app.use("/register",register);
+app.use("/register", register);
 app.use("/dashboard", dashboard);
+app.use("/parts", parts);
+app.use("/assemblies", assemblies);
+app.use("/statistics", statistics); // Ensure this line exists
+app.use("/assemble", assemble);
+app.use("/test", test); // Keep the test route
 
-
-
-mongoose.connect('mongodb://localhost:27017/SkyTech',
-    { 
+mongoose.connect(process.env.MONGO_URI, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
 }).then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
+  .catch(err => console.log(err));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

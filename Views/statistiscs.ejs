@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - SkyTech</title>
+</head>
+<body>
+    <h1>Statistics</h1>
+    <pre>
+        Parts: <%= JSON.stringify(parts, null, 2) %>
+        Least Parts: <%= JSON.stringify(leastParts, null, 2) %>
+        Drone Count: <%= droneCount %>
+        Minimum Parts for Drones: <%= minParts %>
+        Recent Assemblies: <%= JSON.stringify(recentAssemblies, null, 2) %>
+    </pre>
+    <div class="text-center" style="margin-top: 20px;">
+        <a href="/dashboard" class="btn btn-info btn-lg" role="button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

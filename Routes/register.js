@@ -1,32 +1,36 @@
 const express = require("express");
 const router = express.Router();
-
 const User = require("../Models/user");
-
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 
 router.use(cookieParser());
 
 router.get("/", function(req, res){
     res.render("register", {page: 'register.ejs'});
-
-    const token = req.cookies.token;
-    console.log(token);
 });
 
-router.post("/",function(req, res){
+router.post("/", async function(req, res){
+    try {
+        const { username, password, firstname, lastname, email, avatar } = req.body;
+        
+        // Hash the password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const nUser ={ username, password, fristname, lastname, email, avatar } = req.body;
+        const newUser = new User({ username, password: hashedPassword, firstname, lastname, email, avatar });
 
-    const token = jwt.sign({username: username}, password, {expiresIn:'7d'});
+        await User.create(newUser);
+        
+        const token = jwt.sign({ username: username }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        res.cookie('token', token, { httpOnly: true });
 
-    const newUser = new User({username, password,fristname, lastname, email, avatar});
-
-    res.cookie('token', token, { httpOnly: true })
-
-    User.create(newUser);
-    return res.redirect("/");
+        return res.redirect("/");
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send("Error registering new user.");
+    }
 });
 
 module.exports = router;

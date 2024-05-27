@@ -1,29 +1,31 @@
-html,body{
-    height: 100%;
-    background-color: #f5f5f5;
+body {
+    padding-top: 50px;
 }
 
-.mynav{
-    color: #fff;
+.jumbotron {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border-radius: 10px;
 }
-.mynav li a{
-    color: #fff;
-    text-decoration: none;
+
+.navbar-inverse {
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    position: fixed;
     width: 100%;
-    display: block;
-    border-radius: 5px;
-    padding: 8px 5px;
-}
-
-.mynav li a.active{
-    background-color: #051747;
-}
-
-.mynav li a:hover{
-    background-color: #051747;
-}
-
-.mynav li a i{
-    width: 25px;
-    text-align: center;
+    bottom: 0;
+    color: #343a40;
 }

@@ -1,0 +1,32 @@
+body {
+    padding-top: 50px;
+}
+
+.jumbotron, .panel {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border-radius: 10px;
+}
+
+.navbar-inverse {
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    color: #343a40;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+}

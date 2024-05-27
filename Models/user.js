@@ -1,9 +1,8 @@
-var mongoose = require("mongoose");
-    //passportLocalMongoose = require("passport-local-mongoose");
+const mongoose = require("mongoose");
 
-var UserSchema = new mongoose.Schema({
-    username: {type: String, unique: true, required: true},
-    password: {type: String, unique: true, required: true},
+const UserSchema = new mongoose.Schema({
+    username: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
     avatar: String,
     firstname: String,
     lastname: String,
@@ -12,6 +11,4 @@ var UserSchema = new mongoose.Schema({
     resetPasswordExpires: Date
 });
 
-//UserSchema.plugin(passportLocalMongoose);                   //Adds method to the user
-
-module.exports = mongoose.model("User", UserSchema,"Users");
+module.exports = mongoose.model("User", UserSchema);
