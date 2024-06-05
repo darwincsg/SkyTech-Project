@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const AssemblySchema = new mongoose.Schema({
-    parts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Part' }],
-    date: { type: Date, default: Date.now }
+const AssemblySchema = new Schema({
+    droneId: { type: Schema.Types.ObjectId, ref: 'Drone' },
+    parts: [{ type: Schema.Types.ObjectId, ref: 'Part' }],
+    assemblyDate: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Assembly", AssemblySchema);
+module.exports = mongoose.model('Assembly', AssemblySchema);

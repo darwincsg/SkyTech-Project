@@ -33,8 +33,6 @@ app.use("/assemble", assemble);
 app.use("/test", test); // Keep the test route
 
 mongoose.connect(process.env.MONGO_URI, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true 
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -43,3 +41,29 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+app.get("/login", function(req, res) {
+    res.render("login", { page: 'login' });
+});
+
+app.post("/login", async function(req, res) {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            return res.status(400).send("Invalid username or password.");
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(400).send("Invalid username or password.");
+        }
+
+        const token = jwt.sign({ username: username }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        res.cookie('token', token, { httpOnly: true });
+
+        return res.redirect("/dashboard");
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send("Error logging in.");
+    }
+});

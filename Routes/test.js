@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    // Define some mock data for testing
-    const parts = [
+
+    const parts = [ //exemplo mas tmb da
         { name: 'Motor', quantity: 10 },
         { name: 'Helice', quantity: 20 },
         { name: 'Bateria', quantity: 5 }

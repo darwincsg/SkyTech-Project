@@ -9,6 +9,7 @@ const generateDroneId = () => {
 
 router.get("/", async (req, res) => {
     try {
+        console.log("Loading parts from database...");
         const motors = await Part.findOne({ name: "Motor" });
         const helices = await Part.findOne({ name: "Helice" });
         const batteries = await Part.findOne({ name: "Bateria" });
@@ -23,6 +24,7 @@ router.get("/", async (req, res) => {
             Math.floor(batteriesCount / 1)
         );
 
+        console.log(`Max drones that can be assembled: ${maxDrones}`);
         const drones = await Drone.find();
         res.render("assemble", {
             error: null,
@@ -33,12 +35,14 @@ router.get("/", async (req, res) => {
             maxDrones: maxDrones
         });
     } catch (err) {
+        console.error("Error loading assemble page:", err);
         res.status(500).send("Error loading assemble page");
     }
 });
 
 router.post("/", async (req, res) => {
     try {
+        console.log("Starting drone assembly process...");
         const motors = await Part.findOne({ name: "Motor" });
         const helices = await Part.findOne({ name: "Helice" });
         const batteries = await Part.findOne({ name: "Bateria" });
@@ -69,11 +73,19 @@ router.post("/", async (req, res) => {
             await batteries.save();
 
             for (let i = 0; i < maxDrones; i++) {
-                const drone = new Drone({ droneId: generateDroneId() });
+                const drone = new Drone({ 
+                    droneId: generateDroneId(),
+                    partsRequired: {
+                        Motor: 4,
+                        Helice: 16,
+                        Bateria: 1
+                    }
+                });
                 await drone.save();
             }
         }
 
+        console.log(`Assembled ${maxDrones} drones.`);
         const drones = await Drone.find();
         res.render("assemble", {
             error: `Assembled ${maxDrones} drones.`,
@@ -84,6 +96,7 @@ router.post("/", async (req, res) => {
             maxDrones: maxDrones
         });
     } catch (err) {
+        console.error("Error assembling drones:", err);
         res.status(500).send("Error assembling drones");
     }
 });
@@ -94,6 +107,7 @@ router.post("/edit/:id", async (req, res) => {
         await Drone.findByIdAndUpdate(req.params.id, { droneId, date });
         res.redirect("/assemble");
     } catch (err) {
+        console.error("Error editing drone:", err);
         res.status(500).send("Error editing drone");
     }
 });
@@ -103,6 +117,7 @@ router.post("/delete/:id", async (req, res) => {
         await Drone.findByIdAndDelete(req.params.id);
         res.redirect("/assemble");
     } catch (err) {
+        console.error("Error deleting drone:", err);
         res.status(500).send("Error deleting drone");
     }
 });

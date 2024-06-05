@@ -9,15 +9,39 @@ const bcrypt = require('bcrypt');
 router.use(cookieParser());
 router.use(express.json());
 
+/**
+ * GET /
+ * 
+ * Renders the landing page.
+ * 
+ * Input: None
+ * Output: Renders 'landing' view
+ */
 router.get("/", function (req, res) {
     res.render("landing");
 });
 
+/**
+ * GET /login
+ * 
+ * Renders the login page with optional error message.
+ * 
+ * Input: Query parameter 'error' (optional)
+ * Output: Renders 'login' view with error message (if any)
+ */
 router.get("/login", function (req, res) {
-    const error = req.query.error;  // Get the error query parameter
+    const error = req.query.error;  
     res.render("login", { page: 'login', error: error });
 });
 
+/**
+ * POST /login
+ * 
+ * Handles user login.
+ * 
+ * Input: Request body containing 'username' and 'password'
+ * Output: Redirects to '/dashboard' on success, or to '/login' with an error message on failure
+ */
 router.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
@@ -25,13 +49,13 @@ router.post("/login", async (req, res) => {
         const user = await User.findOne({ username: username });
         if (!user) {
             console.log("Invalid username");
-            return res.redirect('/login?error=Invalid%20username'); // Redirect with error message
+            return res.redirect('/login?error=Invalid%20username'); 
         }
 
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             console.log("Invalid password");
-            return res.redirect('/login?error=Invalid%20password'); // Redirect with error message
+            return res.redirect('/login?error=Invalid%20password'); 
         }
 
         console.log("User authenticated, generating token...");
@@ -46,6 +70,14 @@ router.post("/login", async (req, res) => {
     }
 });
 
+/**
+ * Middleware: authenticateToken
+ * 
+ * Authenticates the JWT token from cookies.
+ * 
+ * Input: Request cookies containing 'token'
+ * Output: Adds 'user' to request object on success, or responds with 403 status on failure
+ */
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
@@ -61,12 +93,27 @@ const authenticateToken = (req, res, next) => {
     }
 };
 
+/**
+ * GET /logout
+ * 
+ * Logs out the user by clearing the JWT token cookie.
+ * 
+ * Input: None
+ * Output: Redirects to '/login'
+ */
 router.get("/logout", (req, res) => {
     res.clearCookie('token');
     res.redirect('/login');
 });
 
-// Example of using the middleware
+/**
+ * GET /dashboard
+ * 
+ * Renders the dashboard page. Uses authenticateToken middleware to verify JWT.
+ * 
+ * Input: None
+ * Output: Renders 'dashboard' view with user data
+ */
 router.get("/dashboard", authenticateToken, (req, res) => {
     res.render("dashboard", { user: req.user });
 });
